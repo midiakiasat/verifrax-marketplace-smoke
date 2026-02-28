@@ -14,3 +14,6 @@ jobs:
 
       - name: VERIFRAX smoke
         uses: Verifrax/VERIFRAX@v1
+        with:
+          mode: pass
+          out_path: verifrax.seal.json
