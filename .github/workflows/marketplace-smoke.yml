@@ -6,7 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: CICULLIS smoke
-        uses: Verifrax/cicullis@v0
+        uses: Verifrax/cicullis@v0.1.3
+        env:
+          CICULLIS_MODE: pass
+
       - name: VERIFRAX smoke
         uses: Verifrax/VERIFRAX@v1
