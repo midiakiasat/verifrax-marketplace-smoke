@@ -15,6 +15,8 @@ jobs:
         uses: Verifrax/VERIFRAX@v1
         with:
           mode: audit
-          out_path: verifrax.seal.json
           policy_path: .verifrax/policy.yaml
+          sbom_path: .verifrax/sbom.spdx.json
+          out_path: verifrax.seal.json
+
 
