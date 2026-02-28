@@ -45,7 +45,6 @@ jobs:
 
           python3 -m json.tool .verifrax/policy.json >/dev/null
           python3 -m json.tool .verifrax/sbom.spdx.json >/dev/null
-      - uses: actions/checkout@v4
 
       - name: CICULLIS smoke
         uses: Verifrax/cicullis@v0
@@ -58,5 +57,3 @@ jobs:
           policy_path: .verifrax/policy.json
           sbom_path: .verifrax/sbom.spdx.json
           out_path: verifrax.seal.json
-
-
