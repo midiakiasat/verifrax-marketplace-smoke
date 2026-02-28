@@ -1,0 +1,14 @@
+name: marketplace-smoke
+on:
+  workflow_dispatch:
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: CICULLIS smoke
+        uses: Verifrax/cicullis@v0
+
+      - name: VERIFRAX smoke
+        uses: Verifrax/VERIFRAX@v1
