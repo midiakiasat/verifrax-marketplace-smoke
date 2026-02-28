@@ -14,7 +14,7 @@ jobs:
       - name: VERIFRAX smoke
         uses: Verifrax/VERIFRAX@v1
         with:
-          mode: pass
+          mode: audit
           out_path: verifrax.seal.json
-        env:
-          VERIFRAX_MODE: pass
+          policy_path: .verifrax/policy.yaml
+
