@@ -11,9 +11,10 @@ jobs:
         uses: Verifrax/cicullis@v0
         env:
           CICULLIS_MODE: pass
-
       - name: VERIFRAX smoke
         uses: Verifrax/VERIFRAX@v1
         with:
           mode: pass
           out_path: verifrax.seal.json
+        env:
+          VERIFRAX_MODE: pass
