@@ -1,0 +1,19 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "verifrax-marketplace-smoke",
+  "documentNamespace": "https://verifrax.net/spdx/smoke",
+  "creationInfo": {
+    "created": "2026-02-28T00:00:00Z",
+    "creators": ["Tool: verifrax-marketplace-smoke"]
+  },
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-smoke",
+      "name": "smoke",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false
+    }
+  ]
+}
