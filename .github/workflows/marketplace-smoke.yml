@@ -7,6 +7,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Prepare inputs (deterministic)
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p .verifrax
+
+          # fetch canonical policy JSON from VERIFRAX@v1
+          gh api "repos/Verifrax/VERIFRAX/contents/policy/example.v1.json?ref=v1" -q .content \
+            | tr -d '\n' \
+            | base64 --decode > .verifrax/policy.json
+
+          # minimal SPDX SBOM (valid JSON)
+          cat > .verifrax/sbom.spdx.json <<'JSON'
+          {
+            "spdxVersion": "SPDX-2.3",
+            "SPDXID": "SPDXRef-DOCUMENT",
+            "name": "verifrax-marketplace-smoke",
+            "dataLicense": "CC0-1.0",
+            "documentNamespace": "https://verifrax.net/spdx/smoke",
+            "creationInfo": {
+              "created": "2024-01-01T00:00:00Z",
+              "creators": ["Tool: verifrax-marketplace-smoke"]
+            },
+            "packages": []
+          }
+          JSON
+
+          # sanity (hard fail on HTML / wrong body)
+          test -s .verifrax/policy.json
+          if head -c 256 .verifrax/policy.json | LC_ALL=C grep -Eiq "<html|<head|<body|rate limit|not found|access denied"; then
+            echo "FATAL: policy.json is HTML/error body" >&2
+            exit 97
+          fi
+
+          python3 -m json.tool .verifrax/policy.json >/dev/null
+          python3 -m json.tool .verifrax/sbom.spdx.json >/dev/null
+      - uses: actions/checkout@v4
+
       - name: CICULLIS smoke
         uses: Verifrax/cicullis@v0
         env:
