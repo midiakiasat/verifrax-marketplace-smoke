@@ -12,7 +12,7 @@ jobs:
         env:
           CICULLIS_MODE: pass
       - name: VERIFRAX smoke
-        uses: Verifrax/VERIFRAX@v1
+        uses: Verifrax/VERIFRAX.0.7@v1
         with:
           mode: audit
           policy_path: .verifrax/policy.json
