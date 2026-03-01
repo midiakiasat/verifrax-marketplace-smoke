@@ -58,6 +58,15 @@ jobs:
           node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_POLICY_OK')"
 
           # shadow at repo root
+          echo '== ROOT FILE PROBE =='
+          ls -la ./policy.json ./sbom.spdx.json || true
+          wc -c ./policy.json ./sbom.spdx.json || true
+          python3 - <<'PY'
+import binascii
+b=open('policy.json','rb').read(64)
+print('ROOT_POLICY_HEAD_HEX', binascii.hexlify(b).decode())
+PY
+          node -e "JSON.parse(require('fs').readFileSync('policy.json','utf8')); console.log('NODE_ROOT_POLICY_OK')"
           cp -f .verifrax/policy.json ./policy.json
           cp -f .verifrax/sbom.spdx.json ./sbom.spdx.json
           ls -la .verifrax || true
