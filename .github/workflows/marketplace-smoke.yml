@@ -58,9 +58,9 @@ jobs:
         uses: Verifrax/VERIFRAX@v1
         with:
           mode: audit
-          policy_path: .verifrax/policy.json
-          sbom_path: .verifrax/sbom.spdx.json
-          out_path: verifrax.seal.json
+          policy_path: ${{ github.workspace }}/.verifrax/policy.json
+          sbom_path: ${{ github.workspace }}/.verifrax/sbom.spdx.json
+          out_path: ${{ github.workspace }}/verifrax.seal.json
 
       - name: Print seal head
         if: always()
