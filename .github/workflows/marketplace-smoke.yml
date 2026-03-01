@@ -74,7 +74,7 @@ jobs:
           mode: pass
 
       - name: VERIFRAX smoke
-        uses: Verifrax/VERIFRAX@89731dca9a0d1febde012bc23acafc05f73d2ce8
+        uses: Verifrax/VERIFRAX@8d7571fda2965477f2172e60ac4f0c8948fbdec0
         with:
           mode: audit
           policy_path: ${{ github.workspace }}/policy.json
