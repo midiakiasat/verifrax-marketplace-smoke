@@ -21,6 +21,11 @@ jobs:
           set -euo pipefail
           mkdir -p .verifrax
 
+          # shadow copy at repo root (defensive for action-relative reads)
+          cp .verifrax/policy.json ./policy.json || true
+          cp .verifrax/sbom.spdx.json ./sbom.spdx.json || true
+
+
           # fetch canonical policy JSON from VERIFRAX@v1 (raw bytes)
           curl -fsSL \
             -H "Authorization: token $GH_TOKEN" \
@@ -58,8 +63,8 @@ jobs:
         uses: Verifrax/VERIFRAX@v1
         with:
           mode: audit
-          policy_path: ${{ github.workspace }}/.verifrax/policy.json
-          sbom_path: ${{ github.workspace }}/.verifrax/sbom.spdx.json
+          policy_path: ${{ github.workspace }}/policy.json
+          sbom_path: ${{ github.workspace }}/sbom.spdx.json
           out_path: ${{ github.workspace }}/verifrax.seal.json
 
       - name: Print seal head
