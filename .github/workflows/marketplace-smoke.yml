@@ -45,6 +45,22 @@ jobs:
 
           python3 -m json.tool .verifrax/policy.json >/dev/null
           python3 -m json.tool .verifrax/sbom.spdx.json >/dev/null
+          echo '== POLICY RAW (first 40 lines) ==' 
+          sed -n '1,40p' .verifrax/policy.json || true
+          echo '== POLICY BYTE COUNT ==' 
+          wc -c .verifrax/policy.json || true
+          echo '== POLICY SHA256 ==' 
+          sha256sum .verifrax/policy.json || true
+          echo '== POLICY JSON VALIDATION (python) ==' 
+          python3 - <<'PY'
+import json
+p='.verifrax/policy.json'
+b=open(p,'rb').read()
+print('bytes',len(b))
+print('head',b[:80])
+json.loads(b.decode('utf-8'))
+print('OK_JSON')
+PY
 
 
       - name: Debug policy.json (bytes + parse)
