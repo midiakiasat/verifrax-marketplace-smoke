@@ -73,6 +73,14 @@ jobs:
         with:
           mode: pass
 
+      - name: Ensure package.json for VERIFRAX action
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f package.json || cat > package.json <<'JSON'
+          {"name":"verifrax-marketplace-smoke","private":true,"version":"0.0.0"}
+          JSON
+
       - name: VERIFRAX smoke
         uses: Verifrax/VERIFRAX@8d7571fda2965477f2172e60ac4f0c8948fbdec0
         with:
