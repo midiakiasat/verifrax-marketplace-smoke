@@ -93,6 +93,22 @@ PY
           node -e "JSON.parse(require('fs').readFileSync(process.env.AROOT+'/.verifrax/sbom.spdx.json','utf8')); console.log('NODE_OK_SBOM_ACTIONDIR')"
 
       - name: VERIFRAX smoke
+
+      - name: Probe action-side read (exact files we mirrored)
+        shell: bash
+        run: |
+          set -euo pipefail
+          AROOT="${RUNNER_WORKSPACE:-/home/runner/work}/_actions/Verifrax/VERIFRAX/v1"
+          echo "AROOT=$AROOT"
+          ls -la "$AROOT" || true
+          ls -la "$AROOT/.verifrax" || true
+          wc -c "$AROOT/.verifrax/policy.json" "$AROOT/.verifrax/sbom.spdx.json" || true
+          python3 - <<'PY'
+import binascii
+b=open('/home/runner/work/verifrax-marketplace-smoke/_actions/Verifrax/VERIFRAX/v1/.verifrax/policy.json','rb').read(64)
+print('ACTION_POLICY_HEAD_HEX', binascii.hexlify(b).decode())
+PY
+
         uses: Verifrax/VERIFRAX@v1
         with:
           mode: audit
