@@ -1,6 +1,10 @@
 name: marketplace-smoke
-on:
+"on":
   workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
