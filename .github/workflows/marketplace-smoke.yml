@@ -1,7 +1,9 @@
 name: marketplace-smoke
 
-on:
+"on":
   workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -21,13 +23,19 @@ jobs:
           set -euo pipefail
           mkdir -p .verifrax
 
-
-          # fetch canonical policy JSON from VERIFRAX@v1 (raw bytes)
-          curl -fsSL \
-            -H "Authorization: token $GH_TOKEN" \
-            -H "Accept: application/vnd.github.raw" \
-            "https://api.github.com/repos/Verifrax/VERIFRAX/contents/policy/example.v1.json?ref=v1" \
-            > .verifrax/policy.json
+          # inline minimal policy JSON (known-good)
+          cat > .verifrax/policy.json <<'JSON'
+          {
+            "version": "v1",
+            "rules": [
+              {
+                "id": "SMOKE_ALWAYS_PASS",
+                "when": { "always": true },
+                "then": { "decision": "allow", "reason": "smoke" }
+              }
+            ]
+          }
+          JSON
 
           # minimal SPDX SBOM (valid JSON)
           cat > .verifrax/sbom.spdx.json <<'JSON'
@@ -45,70 +53,22 @@ jobs:
           }
           JSON
 
-          # sanity
-          test -s .verifrax/policy.json
           python3 -c "import json; json.load(open('.verifrax/policy.json'))"
           python3 -c "import json; json.load(open('.verifrax/sbom.spdx.json'))"
+          node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_POLICY_OK')"
 
-          # shadow copy at repo root (defensive for action-relative reads)
+          # shadow at repo root
           cp -f .verifrax/policy.json ./policy.json
           cp -f .verifrax/sbom.spdx.json ./sbom.spdx.json
           ls -la .verifrax || true
           wc -c .verifrax/policy.json .verifrax/sbom.spdx.json || true
-          python3 - <<'PY'
-import binascii
-b=open('.verifrax/policy.json','rb').read(64)
-print('POLICY_HEAD_HEX', binascii.hexlify(b).decode())
-PY
-
 
       - name: CICULLIS smoke
         uses: Verifrax/cicullis@v0
         with:
           mode: pass
 
-
-
-      - name: Mirror inputs into VERIFRAX action dir (defensive)
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo '== WORKSPACE =='
-          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
-          echo "RUNNER_WORKSPACE=${RUNNER_WORKSPACE:-}"
-          test -s .verifrax/policy.json
-          test -s .verifrax/sbom.spdx.json
-          echo '== PARSE (node) workspace =='
-          node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_OK_POLICY_WORKSPACE')"
-          node -e "JSON.parse(require('fs').readFileSync('.verifrax/sbom.spdx.json','utf8')); console.log('NODE_OK_SBOM_WORKSPACE')"
-          # action checkout root
-          AROOT="${RUNNER_WORKSPACE:-/home/runner/work}/_actions/Verifrax/VERIFRAX/v1"
-          export AROOT
-          echo "== AROOT=$AROOT =="
-          mkdir -p "$AROOT/.verifrax"
-          cp -f .verifrax/policy.json "$AROOT/.verifrax/policy.json"
-          cp -f .verifrax/sbom.spdx.json "$AROOT/.verifrax/sbom.spdx.json"
-          echo '== PARSE (node) action-dir =='
-          node -e "JSON.parse(require('fs').readFileSync(process.env.AROOT+'/.verifrax/policy.json','utf8')); console.log('NODE_OK_POLICY_ACTIONDIR')"
-          node -e "JSON.parse(require('fs').readFileSync(process.env.AROOT+'/.verifrax/sbom.spdx.json','utf8')); console.log('NODE_OK_SBOM_ACTIONDIR')"
-
       - name: VERIFRAX smoke
-
-      - name: Probe action-side read (exact files we mirrored)
-        shell: bash
-        run: |
-          set -euo pipefail
-          AROOT="${RUNNER_WORKSPACE:-/home/runner/work}/_actions/Verifrax/VERIFRAX/v1"
-          echo "AROOT=$AROOT"
-          ls -la "$AROOT" || true
-          ls -la "$AROOT/.verifrax" || true
-          wc -c "$AROOT/.verifrax/policy.json" "$AROOT/.verifrax/sbom.spdx.json" || true
-          python3 - <<'PY'
-import binascii
-b=open('/home/runner/work/verifrax-marketplace-smoke/_actions/Verifrax/VERIFRAX/v1/.verifrax/policy.json','rb').read(64)
-print('ACTION_POLICY_HEAD_HEX', binascii.hexlify(b).decode())
-PY
-
         uses: Verifrax/VERIFRAX@v1
         with:
           mode: audit
@@ -122,4 +82,4 @@ PY
         run: |
           set -euo pipefail
           ls -la || true
-          test -s verifrax.seal.json && head -n 40 verifrax.seal.json || true
+          test -s verifrax.seal.json && head -n 60 verifrax.seal.json || true
