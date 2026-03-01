@@ -41,11 +41,7 @@ jobs:
             "packages": []
           }
           JSON
-
-          python3 -c "import json; json.load(open('.verifrax/policy.json'))"
           python3 -c "import json; json.load(open('.verifrax/sbom.spdx.json'))"
-          node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_POLICY_OK')"
-
           # shadow at repo root
           echo '== FORCE POLICY (CURRENT SCHEMA) =='
           cat > .verifrax/policy.json <<'JSON'
@@ -62,6 +58,9 @@ jobs:
             ]
           }
           JSON
+          python3 -c "import json; json.load(open('.verifrax/policy.json'))"
+          node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_POLICY_OK_AFTER_FORCE')"
+
           node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_POLICY_OK_AFTER_FORCE')"
 
           cp -f .verifrax/policy.json ./policy.json
