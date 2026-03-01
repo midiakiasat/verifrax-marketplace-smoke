@@ -59,6 +59,29 @@ jobs:
         with:
           mode: pass
 
+
+      - name: Mirror inputs into VERIFRAX action dir (defensive)
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '== WORKSPACE =='
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
+          echo "RUNNER_WORKSPACE=${RUNNER_WORKSPACE:-}"
+          test -s .verifrax/policy.json
+          test -s .verifrax/sbom.spdx.json
+          echo '== PARSE (node) workspace =='
+          node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_OK')"
+          node -e "JSON.parse(require('fs').readFileSync('.verifrax/sbom.spdx.json','utf8')); console.log('NODE_OK')"
+          # actions are checked out under /home/runner/work/_actions
+          AROOT="${RUNNER_WORKSPACE:-/home/runner/work}/_actions/Verifrax/VERIFRAX/v1"
+          echo "== AROOT=$AROOT =="
+          mkdir -p "$AROOT/.verifrax"
+          cp -f .verifrax/policy.json "$AROOT/.verifrax/policy.json"
+          cp -f .verifrax/sbom.spdx.json "$AROOT/.verifrax/sbom.spdx.json"
+          echo '== PARSE (node) action-dir =='
+          node -e "JSON.parse(require('fs').readFileSync(process.env.AROOT+'/.verifrax/policy.json','utf8')); console.log('NODE_OK_ACTIONDIR')"
+          node -e "JSON.parse(require('fs').readFileSync(process.env.AROOT+'/.verifrax/sbom.spdx.json','utf8')); console.log('NODE_OK_ACTIONDIR')"
+
       - name: VERIFRAX smoke
         uses: Verifrax/VERIFRAX@v1
         with:
