@@ -46,6 +46,25 @@ jobs:
           python3 -m json.tool .verifrax/policy.json >/dev/null
           python3 -m json.tool .verifrax/sbom.spdx.json >/dev/null
 
+
+      - name: Debug policy.json (bytes + parse)
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '== PWD =='; pwd
+          echo '== ls -la .verifrax =='; ls -la .verifrax || true
+          echo '== file policy.json =='; file .verifrax/policy.json || true
+          echo '== first 64 bytes (hex) =='
+          python3 - <<'PY'
+import binascii
+p='.verifrax/policy.json'
+b=open(p,'rb').read(64)
+print(binascii.hexlify(b).decode())
+print('TEXT_HEAD:', b[:200])
+PY
+          echo '== python json.tool policy.json =='
+          python3 -m json.tool .verifrax/policy.json | head -n 5 || true
+
       - name: CICULLIS smoke
         uses: Verifrax/cicullis@v0
         env:
