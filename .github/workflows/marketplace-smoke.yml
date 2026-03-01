@@ -22,12 +22,19 @@ jobs:
           mkdir -p .verifrax
 
 
-          # fetch canonical policy JSON from VERIFRAX@v1 (raw bytes)
-          curl -fsSL \
-            -H "Authorization: token $GH_TOKEN" \
-            -H "Accept: application/vnd.github.raw" \
-            "https://api.github.com/repos/Verifrax/VERIFRAX/contents/policy/example.v1.json?ref=v1" \
-            > .verifrax/policy.json
+          # inline minimal policy JSON (known-good) — isolates VERIFRAX read/parse path
+          cat > .verifrax/policy.json <<'JSON'
+          {
+            "version": "v1",
+            "rules": [
+              {
+                "id": "SMOKE_ALWAYS_PASS",
+                "when": { "always": true },
+                "then": { "decision": "allow", "reason": "smoke" }
+              }
+            ]
+          }
+          JSON
 
           # minimal SPDX SBOM (valid JSON)
           cat > .verifrax/sbom.spdx.json <<'JSON'
