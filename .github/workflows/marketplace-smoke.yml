@@ -25,21 +25,6 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .verifrax
-
-          # inline minimal policy JSON (known-good)
-          cat > .verifrax/policy.json <<'JSON'
-          {
-            "version": "v1",
-            "rules": [
-              {
-                "id": "SMOKE_ALWAYS_PASS",
-                "when": { "always": true },
-                "then": { "decision": "allow", "reason": "smoke" }
-              }
-            ]
-          }
-          JSON
-
           # minimal SPDX SBOM (valid JSON)
           cat > .verifrax/sbom.spdx.json <<'JSON'
           {
@@ -75,8 +60,9 @@ jobs:
               }
             ]
           }
-JSON
+          JSON
           node -e "JSON.parse(require('fs').readFileSync('.verifrax/policy.json','utf8')); console.log('NODE_POLICY_OK_AFTER_FORCE')"
+
           cp -f .verifrax/policy.json ./policy.json
           cp -f .verifrax/sbom.spdx.json ./sbom.spdx.json
           ls -la .verifrax || true
