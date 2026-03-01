@@ -1,6 +1,8 @@
 name: marketplace-smoke
-"on":
+
+on:
   workflow_dispatch:
+
 permissions:
   contents: read
   actions: read
@@ -19,10 +21,12 @@ jobs:
           set -euo pipefail
           mkdir -p .verifrax
 
-          # fetch canonical policy JSON from VERIFRAX@v1
-          gh api "repos/Verifrax/VERIFRAX/contents/policy/example.v1.json?ref=v1" -q .content \
-            | tr -d '\n' \
-            | base64 --decode > .verifrax/policy.json
+          # fetch canonical policy JSON from VERIFRAX@v1 (raw bytes)
+          curl -fsSL \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/Verifrax/VERIFRAX/contents/policy/example.v1.json?ref=v1" \
+            > .verifrax/policy.json
 
           # minimal SPDX SBOM (valid JSON)
           cat > .verifrax/sbom.spdx.json <<'JSON'
@@ -40,59 +44,28 @@ jobs:
           }
           JSON
 
-          # sanity (hard fail on HTML / wrong body)
+          # sanity
           test -s .verifrax/policy.json
-          if head -c 256 .verifrax/policy.json | LC_ALL=C grep -Eiq "<html|<head|<body|rate limit|not found|access denied"; then
-            echo "FATAL: policy.json is HTML/error body" >&2
-            exit 97
-          fi
-
-          python3 -m json.tool .verifrax/policy.json >/dev/null
-          python3 -m json.tool .verifrax/sbom.spdx.json >/dev/null
-          echo '== POLICY RAW (first 40 lines) ==' 
-          sed -n '1,40p' .verifrax/policy.json || true
-          echo '== POLICY BYTE COUNT ==' 
-          wc -c .verifrax/policy.json || true
-          echo '== POLICY SHA256 ==' 
-          sha256sum .verifrax/policy.json || true
-          echo '== POLICY JSON VALIDATION (python) ==' 
-          python3 - <<'PY'
-import json
-p='.verifrax/policy.json'
-b=open(p,'rb').read()
-print('bytes',len(b))
-print('head',b[:80])
-json.loads(b.decode('utf-8'))
-print('OK_JSON')
-PY
-
-
-      - name: Debug policy.json (bytes + parse)
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo '== PWD =='; pwd
-          echo '== ls -la .verifrax =='; ls -la .verifrax || true
-          echo '== file policy.json =='; file .verifrax/policy.json || true
-          echo '== first 64 bytes (hex) =='
-          python3 - <<'PY'
-import binascii
-p='.verifrax/policy.json'
-b=open(p,'rb').read(64)
-print(binascii.hexlify(b).decode())
-print('TEXT_HEAD:', b[:200])
-PY
-          echo '== python json.tool policy.json =='
-          python3 -m json.tool .verifrax/policy.json | head -n 5 || true
+          python3 -c "import json; json.load(open('.verifrax/policy.json'))"
+          python3 -c "import json; json.load(open('.verifrax/sbom.spdx.json'))"
 
       - name: CICULLIS smoke
         uses: Verifrax/cicullis@v0
-        env:
-          CICULLIS_MODE: pass
+        with:
+          mode: pass
+
       - name: VERIFRAX smoke
         uses: Verifrax/VERIFRAX@v1
         with:
           mode: audit
-          policy_path: ${{ github.workspace }}/.verifrax/policy.json
-          sbom_path: ${{ github.workspace }}/.verifrax/sbom.spdx.json
-          out_path: ${{ github.workspace }}/verifrax.seal.json
+          policy_path: .verifrax/policy.json
+          sbom_path: .verifrax/sbom.spdx.json
+          out_path: verifrax.seal.json
+
+      - name: Print seal head
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          ls -la || true
+          test -s verifrax.seal.json && head -n 40 verifrax.seal.json || true
