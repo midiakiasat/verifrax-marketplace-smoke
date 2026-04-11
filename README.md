@@ -1,5 +1,10 @@
 # AUCTORISEAL
 
+## Terminal planes
+
+- **[ANAGNORIUM](https://github.com/Verifrax/ANAGNORIUM)** — terminal recognition
+- **[REGRESSORIUM](https://github.com/Verifrax/REGRESSORIUM)** — terminal recourse
+
 ## Authority of Record for Governed Systems
 
 **AUCTORISEAL** is an authority-of-record system.
@@ -158,3 +163,11 @@ It promises one thing only:
 > **If an action mattered, you can prove who was allowed to authorize it — or prove that no one was.**
 
 Everything else builds on that.
+
+## Adjacent sovereign surfaces
+
+This repository is part of the Verifrax sovereign stack and remains bounded relative to:
+
+- **[ANAGNORIUM](https://github.com/Verifrax/ANAGNORIUM)** for terminal recognition
+- **[REGRESSORIUM](https://github.com/Verifrax/REGRESSORIUM)** for terminal recourse
+
