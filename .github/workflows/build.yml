@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [ main, midiakiasat/terminal-recognition-and-recourse-wiring ]
+    branches: [ main, midiakiasat/materialize-proof-artifact-chain-surface ]
   pull_request:
   workflow_dispatch:
 
