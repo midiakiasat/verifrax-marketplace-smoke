@@ -1,187 +1,65 @@
-# AUCTORISEAL
+# verifrax-marketplace-smoke
 
-## Proof artifacts
+The bounded public smoke-test repository for the Verifrax marketplace surface.
 
-This repository is part of the VERIFRAX proof perimeter.
+## Status
 
-- **ARTIFACT-0006**
-- **ARTIFACT-0005**
-- **ARTIFACT-0004**
-- **ARTIFACT-0003**
-- **ARTIFACT-0002**
-- **ARTIFACT-0001**
+Active public smoke surface for marketplace-facing boundary checks and publication-level confidence signals.
 
-**Canonical public proof surface:** https://proof.verifrax.net  
-**Canonical proof publication repository:** https://github.com/Verifrax/proof  
-**Canonical evidence root:** https://github.com/Verifrax/VERIFRAX
+## Boundary
 
-## Terminal planes
+This repository exists to prove that the marketplace smoke surface is present, readable, and bounded.
 
-- **[ANAGNORIUM](https://github.com/Verifrax/ANAGNORIUM)** — terminal recognition
-- **[REGRESSORIUM](https://github.com/Verifrax/REGRESSORIUM)** — terminal recourse
+It is not the protocol surface.
+It is not the public verifier.
+It is not proof publication.
+It is not authority issuance.
+It is not constitutional law.
+It is not execution authority.
 
-## Authority of Record for Governed Systems
+## What it does
 
-**AUCTORISEAL** is an authority-of-record system.
-It exists to define, record, and verify **who is allowed to authorize actions** in systems capable of irreversible or externally meaningful effects.
+- holds the public marketplace smoke repository identity
+- exposes a bounded smoke-test README surface
+- gives the org a clean marketplace smoke perimeter instead of a role collision
+- supports public surface hygiene and identity discipline
 
-> **Use everything freely but if it matters, you must be able to prove who authorized it before execution.**
+## Inputs / outputs
 
-Execution can be automated.
-Decisions that create responsibility cannot.
+Inputs:
+- repository state
+- public README surface
+- org-facing repository presentation
 
----
+Outputs:
+- a role-correct marketplace smoke public surface
+- a cold-readable repository identity
+- a non-contradictory public perimeter signal
 
-## What AUCTORISEAL Is
+## Role in stack
 
-* An **authority layer**, not an execution engine
-* An **append-only ledger** of authorization decisions
-* A **pre-execution legitimacy system**, not post-incident logging
-* A **deterministic source of truth** for audits, investigations, and replay
+This repository sits below the main Verifrax constitutional and verification surfaces as a smoke-only public perimeter signal.
 
-AUCTORISEAL answers one question only:
+It is adjacent to:
+- `VERIFRAX` as the normative protocol and system perimeter
+- `VERIFRAX-verify` as the public verifier surface
+- `proof` as proof publication
+- `apply` as intake only
 
-> **Who was authorized to allow this action, and under what scope, before it happened?**
+It does not replace any of them.
 
----
+## Not this
 
-## What AUCTORISEAL Is Not
+This repository does not issue authority objects.
+This repository does not verify evidence bundles.
+This repository does not publish canonical proof.
+This repository is not the constitutional source of truth.
+This repository is not the execution plane.
 
-AUCTORISEAL is **not**:
+## Public surface
 
-* an AI system
-* a workflow engine
-* a policy document
-* a compliance checklist
-* a monitoring or logging tool
+Public truth for this repository is the repository surface itself and its committed README boundary.
 
-It does not decide *what* to do.
-It decides **who may allow something to be done**.
+## License
 
----
-
-## Core Invariant
-
-Any system that can:
-
-* mutate state
-* deploy code
-* produce financial impact
-* generate externally relied-upon outputs
-
-**MUST be able to prove who authorized the action prior to execution.**
-
-Post-hoc approval is invalid.
-Implicit authorization is invalid.
-"The system decided" is invalid.
-
-If this proof does not exist, the output is **non-legitimate by definition**.
-
----
-
-## Scope
-
-AUCTORISEAL records and verifies:
-
-* authority grants (seals)
-* scope and constraints
-* revocations
-* freezes
-* protocol versioning
-
-All records are:
-
-* append-only
-* tamper-evident
-* replayable
-* auditable
-
----
-
-## Relationship to Execution
-
-AUCTORISEAL does **not** execute actions.
-
-Execution systems (for example, automation engines or AI-driven workflows) may:
-
-* run freely
-* experiment
-* fail
-
-However, **legitimacy is separate from execution**.
-
-Execution without authority may succeed technically, but it is:
-
-* non-defensible
-* non-compliant
-* non-repudiable
-
----
-
-## Open vs Authoritative Use
-
-The code in this repository is open and may be used freely.
-
-However:
-
-* **Self-hosted use does not create authority-of-record**
-* **Authority-of-record requires continuity, governance, and retention guarantees**
-
-This distinction is intentional.
-
----
-
-## Repository Posture
-
-This repository is:
-
-* conservative
-* slow-moving
-* intentionally boring
-
-Changes are limited to:
-
-* security fixes
-* protocol evolution
-* governance updates
-
-If you are looking for rapid iteration, demos, or experimentation, this is not the correct layer.
-
----
-
-## Governance and Trust
-
-Authority is defined by:
-
-* explicit governance
-* published doctrine
-* immutable history
-
-See:
-
-* `docs/constitution.md`
-* `GOVERNANCE.md`
-* `SECURITY.md`
-
-Trust is earned through **clarity and restraint**, not features.
-
----
-
-## Final Statement
-
-AUCTORISEAL does not promise safety.
-It does not promise correctness.
-It does not promise compliance.
-
-It promises one thing only:
-
-> **If an action mattered, you can prove who was allowed to authorize it — or prove that no one was.**
-
-Everything else builds on that.
-
-## Adjacent sovereign surfaces
-
-This repository is part of the Verifrax sovereign stack and remains bounded relative to:
-
-- **[ANAGNORIUM](https://github.com/Verifrax/ANAGNORIUM)** for terminal recognition
-- **[REGRESSORIUM](https://github.com/Verifrax/REGRESSORIUM)** for terminal recourse
+Apache License 2.0
