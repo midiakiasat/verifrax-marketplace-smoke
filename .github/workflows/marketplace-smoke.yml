@@ -69,7 +69,7 @@ jobs:
           wc -c .verifrax/policy.json .verifrax/sbom.spdx.json || true
 
       - name: CICULLIS smoke
-        uses: Verifrax/cicullis@v0
+        uses: Verifrax/cicullis@v1
         with:
           mode: pass
 
