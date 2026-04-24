@@ -1,5 +1,7 @@
 # verifrax-marketplace-smoke
 
+* License: Apache License Version 2.0
+
 The bounded public smoke-test repository for the Verifrax marketplace surface.
 
 ## Status
@@ -62,4 +64,4 @@ Public truth for this repository is the repository surface itself and its commit
 
 ## License
 
-Apache License 2.0
+This repository is licensed under the Apache License 2.0. See `LICENSE`.
